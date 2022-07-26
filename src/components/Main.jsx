@@ -1,79 +1,59 @@
-import { useState } from "react";
+import { useState } from "react"
 
 function Main() {
   const [open, setOpen] = useState(false); //Ignore this state
   //const [form, setForm] = useState(initalFormState)
   const [userReply, setUserReply] = useState({
     color: "",
-    time: false,
-    fullName: "",
+    spendTime: [],
+    username: "",
     review: "",
     email: "",
     
   })
 
-  // const submitForm = (event) => {
-  //   event.preventDefault();
+  const submitForm = (event) => {
+    event.preventDefault();
 
-  //   fetch(URL, {
-  //     method: "POST",
-  //     body: JSON.stringify(form)
-  //   })
+    fetch(URL, {
+      method: "POST",
+      body: JSON.stringify(form)
+    })
 
-  //   setForm(initalFormState)
-  // }
-  //console.log()
-
-  function setter(key, value){
-    setUserReply((previousState) => ( {
-      ...previousState, [key]: value
-    }))
+    setForm(initalFormState)
   }
+  console.log()
 
-  function duckColor(event) {
-    setter(event.target.name, event.target.value)
-  }
-
-  function spendTime(event) {
-    setter(event.target.name, event.target.value)
+  
+    console.log("state", userReply)
+   function handleChange(event) {
+   
+    //event.preventDefault();
+    const inputValue = event.target.value;
+    const inputType = event.target.type;
+    const inputName = event.target.name
+    //const inputChecked = event.target.type
+    //event.target.checked
+    console.log("event", inputValue, inputType, inputName )
+    if (inputType === "radio") {
+      setUserReply({...userReply, color: inputValue})
+    }
+    if (inputType === "checkbox") {
+      if(userReply.spendTime.includes(inputValue)) {
+        // remove swimming
+        userReply.spendTime = userReply.spendTime.filter(value => value !== inputValue)
+      } else {
+        userReply.spendTime.push(inputValue)
+      }
+      setUserReply({...userReply})
+    }
+   
+    if(inputName === "reply") {
+      setUserReply({...userReply, review: inputValue})
+    }
+    setUserReply({...userReply, [inputName]: inputValue})
   }
   
-  console.log("state", userReply)
-   function handleChange(event) {
-   }
-  //   //event.preventDefault();
-  //   const inputValue = event.target.value;
-  //   const inputType = event.target.type;
-  //   const inputName = event.target.name
-  //   //const inputChecked = event.target.type
-  //   //event.target.checked
-  //   console.log("event", inputValue, inputType, inputName )
-  //   if (inputType === "radio") {
-  //     setUserReply({...userReply, duckColor: inputValue})
-  //   }
-  //   // if (inputType === "checkbox" && inputValue === "swimming") {
-  //   //   setUserReply({...userReply, spendTime: inputValue})
-  //   // }
-  //   // if (inputType === "checkbox" && inputValue === "bathing") {
-  //   //   setUserReply({...userReply, spendTime: inputValue})
-  //   // }
-  //   // if (inputType === "checkbox" && inputValue === "chatting") {
-  //   //   setUserReply({...userReply, spendTime: inputValue})
-  //   // }
-  //   // if (inputType === "checkbox" && inputValue === "noTime") {
-  //   //   setUserReply({...userReply, spendTime: inputValue})
-  //   // }
-  //   if(inputName === "reply") {
-  //     setUserReply({...userReply, review: inputValue})
-  //   }
-  //   if(inputName === "username") {
-  //     setUserReply({...userReply, fullName: inputValue})
-  //   }
-  //   if(inputName === "email") {
-  //     setUserReply({...userReply, email: inputValue})
-  //   }
-    
-  // }
 
   return (
     <main className="main">
@@ -82,52 +62,52 @@ function Main() {
         {/* answers should go here */}
       </section>
       <section className="main__form">
-        <form class="form" >
+        <form className="form" >
           <h2>Tell us what you think about your rubber duck!</h2>
 
-          <div class="form__group radio">
+          <div className="form__group radio">
             <h3>How do you rate your rubber duck colour?</h3>
             <ul>
               <li>
-                <input id="color-one" type="radio" name="color" value="1" onChange={duckColor}/>
+                <input id="color-one" type="radio" name="color" value="1" onChange={handleChange} />
                 <label for="color-one">1</label>
               </li>
               <li>
-                <input id="color-two" type="radio" name="color" value="2" onChange={duckColor}/>
+                <input id="color-two" type="radio" name="color" value="2" onChange={handleChange}/>
                 <label for="color-two">2</label>
               </li>
               <li>
-                <input id="color-three" type="radio" name="color" value="3" onChange={duckColor}/>
+                <input id="color-three" type="radio" name="color" value="3" onChange={handleChange}/>
                 <label for="color-three">3</label>
               </li>
               <li>
-                <input id="color-four" type="radio" name="color" value="4" onChange={duckColor}/>
+                <input id="color-four" type="radio" name="color" value="4" onChange={handleChange}/>
                 <label for="color-four">4</label>
               </li>
             </ul>
           </div>
 
-          <div class="form__group">
+          <div className="form__group">
             <h3>How do you like to spend time with your rubber duck</h3>
             <ul>
               <li>
                 <label>
-                  <input name="spend-time" type="checkbox" value="swimming" onChange={spendTime} checked={userReply.time}/>Swimming
+                  <input name="spend-time" type="checkbox" value="swimming" onChange={handleChange} checked={userReply.spendTime.includes('swimming')}/>Swimming
                 </label>
               </li>
               <li>
                 <label>
-                  <input name="spend-time" type="checkbox" value="bathing" onChange={spendTime} checked={userReply.time}/>Bathing
+                  <input name="spend-time" type="checkbox" value="bathing" onChange={handleChange} checked={userReply.spendTime.includes('bathing')}/>Bathing
                 </label>
               </li>
               <li>
                 <label>
-                  <input name="spend-time" type="checkbox" value="chatting" onChange={spendTime} checked={userReply.time}/>Chatting
+                  <input name="spend-time" type="checkbox" value="chatting" onChange={handleChange} checked={userReply.spendTime.includes('chatting')}/>Chatting
                 </label>
               </li>
               <li>
                 <label>
-                <input name="spend-time" type="checkbox" value="noTime" onChange={spendTime} checked={userReply.time}/>I don't like to
+                <input name="spend-time" type="checkbox" value="noTime" onChange={handleChange} checked={userReply.spendTime.includes('noTime')}/>I don't like to
                   spend time with it
                 </label>
               </li>
@@ -163,7 +143,7 @@ function Main() {
               
           </label>
 
-          <input class="form__submit" type="submit" value="Submit Survey!" />
+          <input className="form__submit" type="submit" value="Submit Survey!" />
 
         </form>
       </section>
