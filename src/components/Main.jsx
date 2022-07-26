@@ -1,28 +1,35 @@
 import { useState } from "react"
+import AnswersList from "./AnswersList";
+
+const initialFormState = {
+  color: "",
+  spendTime: [],
+  username: "",
+  review: "",
+  email: "",
+  
+}
 
 function Main() {
   const [open, setOpen] = useState(false); //Ignore this state
-  //const [form, setForm] = useState(initalFormState)
-  const [userReply, setUserReply] = useState({
-    color: "",
-    spendTime: [],
-    username: "",
-    review: "",
-    email: "",
-    
-  })
+  const [form, setForm] = useState(initialFormState)
+  const [answers, setAnswers] = useState([])
+  const [userReply, setUserReply] = useState(initialFormState)
+
+  const addAnswer = (answer) => {
+    setAnswers([...answers, answer])
+  }
 
   const submitForm = (event) => {
     event.preventDefault();
 
-    fetch(URL, {
-      method: "POST",
-      body: JSON.stringify(form)
-    })
-
-    setForm(initalFormState)
+    //read form data and reate answer user reply in answers
+    addAnswer(userReply)
+    //clear form
+    //
+    setUserReply(initialFormState)
   }
-  console.log()
+  console.log('answers', answers)
 
   
     console.log("state", userReply)
@@ -59,10 +66,10 @@ function Main() {
     <main className="main">
       <section className={`main__list ${open ? "open" : ""}`}>
         <h2>Answers list</h2>
-        {/* answers should go here */}
+        <AnswersList answersList={answers} />
       </section>
       <section className="main__form">
-        <form className="form" >
+        <form className="form" onSubmit={submitForm}>
           <h2>Tell us what you think about your rubber duck!</h2>
 
           <div className="form__group radio">
@@ -122,7 +129,7 @@ function Main() {
               rows="10"
               placeholder="You can write here"
               onChange={handleChange}
-              value={userReply.reply}
+              value={userReply.review}
             ></textarea>
           </label>
 
